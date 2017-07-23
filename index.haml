@@ -1,0 +1,109 @@
+!!!
+%html
+  %head
+    %link{:href => "./assets/stylesheets/vendor/bootstrap.min.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "./assets/stylesheets/app.css", :rel => "stylesheet", :type => "text/css"}
+    %meta{:charset => "utf-8"}
+  %body
+    %script{"data-template-name" => "catchall", :type => "text/x-handlebars"}
+      %div.well.text-center
+        %h2 404 - Bad luck
+        %hr
+        %p
+          :plain
+            You might want to try finding what you are looking for on the
+            {{#link-to "index"}}homepage{{/link-to}}.
+
+    %script{"data-template-name" => "navbar", :type => "text/x-handlebars"}
+      %div.navbar.navbar-default
+        %div.container
+          %div.row
+            %div.col.col-md-12
+              %a.navbar-brand.strong{:href => ''} Website
+
+    %script{"data-template-name" => "footer", :type => "text/x-handlebars"}
+      %div.container
+        %div.row
+          %div.col.col-md-12
+            %hr
+            %p.well Footer
+
+    %script{"data-template-name" => "application", :type => "text/x-handlebars"}
+      {{render "navbar" this}}
+      %div.container
+        %div.row
+          %div.col.col-md-4.col-md-offset-8
+            {{input type='text' class='form-control input-sm' placeholder='Search for task ID (e.g. 1)' value=taskIdSearchQuery action='findTaskById'}}
+        %hr
+        %div.row
+          %div.col.col-md-3
+            %div.panel.panel-default
+              %div.panel-heading
+                {{#link-to "index"}}
+                %strong.text-muted Tasks
+                {{/link-to}}
+              -# %div.list-group
+              -#   {{#each task in model}}
+              -#   {{#link-to "task" task class="list-group-item"}}
+              -#   {{task.name}}
+              -#   {{#if task.done}}
+              -#   %span.pull-right.badge.badge-info done
+              -#   {{/if}}
+              -#   {{/link-to}}
+              -#   {{/each}}
+
+              {{#task-list-group tasks=model}}
+              %em.list-group-item.text-center ({{model.length}} items)
+              {{/task-list-group}}
+          %div.col.col-md-9
+            %div.panel.panel-default.panel-body {{outlet}}
+      {{render "footer" this}}
+
+    %script{:type => "text/x-handlebars", "data-template-name" => 'components/task-list-group'}
+      {{yield}}
+      %div.list-group-item
+        <button class="btn btn-xs btn-link center-block" {{action "showInfo"}}>
+        {{#unless isShowingInfo}}
+        %span Show info
+        {{else}}
+        %span Hide
+        {{/unless}}
+        </button>
+        {{#if isShowingInfo}}
+        %div.text-center This is a list of tasks.
+        {{/if}}
+      {{#each task in tasks}}
+      {{#link-to "task" task class="list-group-item"}}
+      {{task.name}}
+      {{#if task.done}}
+      %span.pull-right.badge.badge-info done
+      {{/if}}
+      {{/link-to}}
+      {{/each}}
+    
+    %script{"data-template-name" => "index", :type => "text/x-handlebars"}
+      %div.jumbotron.text-center
+        %h2.text-muted Welcome
+        %hr
+        <button class="btn btn-xs btn-link" {{action toggleInfo}}>Show info</button>
+        %p#main-info-section.hidden This is some info.
+
+    %script{"data-template-name" => "task", :type => "text/x-handlebars"}
+      %h2 Task
+      %p
+        %strong Name:
+        {{name}}
+        {{input tpe="text" class="form-control" placeholder="Task name" value=name}}
+      %p
+        %strong Done:
+        {{input type="checkbox" checked=done}}
+      %p
+        %strong ID:
+        {{id}}
+
+    %script{:src => "./assets/javascripts/vendor/jquery-1.11.0.min.js", :type => "text/javascript"}
+    %script{:src => "./assets/javascripts/vendor/handlebars.min-v1.3.0.js", :type => "text/javascript"}
+    %script{:src => "./assets/javascripts/vendor/ember-1.8.1.min.js", :type => "text/javascript"}
+    %script{:src => "./assets/javascripts/vendor/ember-data.min.js", :type => "text/javascript"}
+    %script{:src => "./assets/javascripts/fixtures.js", :type => "text/javascript"}
+    %script{:src => "./assets/javascripts/app.js", :type => "text/javascript"}

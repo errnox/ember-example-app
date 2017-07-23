@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href='./assets/stylesheets/vendor/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <link href='./assets/stylesheets/app.css' rel='stylesheet' type='text/css'>
+    <meta charset='utf-8'>
+  </head>
+  <body>
+    <script data-template-name='catchall' type='text/x-handlebars'>
+      <div class='well text-center'>
+        <h2>404 - Bad luck</h2>
+        <hr>
+        <p>
+          You might want to try finding what you are looking for on the
+          {{#link-to "index"}}homepage{{/link-to}}.
+        </p>
+      </div>
+    </script>
+    <script data-template-name='navbar' type='text/x-handlebars'>
+      <div class='navbar navbar-default'>
+        <div class='container'>
+          <div class='row'>
+            <div class='col col-md-12'>
+              <a class='navbar-brand strong' href=''>Website</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script data-template-name='footer' type='text/x-handlebars'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col col-md-12'>
+            <hr>
+            <p class='well'>Footer</p>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script data-template-name='application' type='text/x-handlebars'>
+      {{render "navbar" this}}
+      <div class='container'>
+        <div class='row'>
+          <div class='col col-md-4 col-md-offset-8'>
+            {{input type='text' class='form-control input-sm' placeholder='Search for task ID (e.g. 1)' value=taskIdSearchQuery action='findTaskById'}}
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class='col col-md-3'>
+            <div class='panel panel-default'>
+              <div class='panel-heading'>
+                {{#link-to "index"}}
+                <strong class='text-muted'>Tasks</strong>
+                {{/link-to}}
+              </div>
+              {{#task-list-group tasks=model}}
+              <em class='list-group-item text-center'>({{model.length}} items)</em>
+              {{/task-list-group}}
+            </div>
+          </div>
+          <div class='col col-md-9'>
+            <div class='panel panel-default panel-body'>{{outlet}}</div>
+          </div>
+        </div>
+      </div>
+      {{render "footer" this}}
+    </script>
+    <script data-template-name='components/task-list-group' type='text/x-handlebars'>
+      {{yield}}
+      <div class='list-group-item'>
+        <button class="btn btn-xs btn-link center-block" {{action "showInfo"}}>
+        {{#unless isShowingInfo}}
+        <span>Show info</span>
+        {{else}}
+        <span>Hide</span>
+        {{/unless}}
+        </button>
+        {{#if isShowingInfo}}
+        <div class='text-center'>This is a list of tasks.</div>
+        {{/if}}
+      </div>
+      {{#each task in tasks}}
+      {{#link-to "task" task class="list-group-item"}}
+      {{task.name}}
+      {{#if task.done}}
+      <span class='pull-right badge badge-info'>done</span>
+      {{/if}}
+      {{/link-to}}
+      {{/each}}
+    </script>
+    <script data-template-name='index' type='text/x-handlebars'>
+      <div class='jumbotron text-center'>
+        <h2 class='text-muted'>Welcome</h2>
+        <hr>
+        <button class="btn btn-xs btn-link" {{action toggleInfo}}>Show info</button>
+        <p class='hidden' id='main-info-section'>This is some info.</p>
+      </div>
+    </script>
+    <script data-template-name='task' type='text/x-handlebars'>
+      <h2>Task</h2>
+      <p>
+        <strong>Name:</strong>
+        {{name}}
+        {{input tpe="text" class="form-control" placeholder="Task name" value=name}}
+      </p>
+      <p>
+        <strong>Done:</strong>
+        {{input type="checkbox" checked=done}}
+      </p>
+      <p>
+        <strong>ID:</strong>
+        {{id}}
+      </p>
+    </script>
+    <script src='./assets/javascripts/vendor/jquery-1.11.0.min.js' type='text/javascript'></script>
+    <script src='./assets/javascripts/vendor/handlebars.min-v1.3.0.js' type='text/javascript'></script>
+    <script src='./assets/javascripts/vendor/ember-1.8.1.min.js' type='text/javascript'></script>
+    <script src='./assets/javascripts/vendor/ember-data.min.js' type='text/javascript'></script>
+    <script src='./assets/javascripts/fixtures.js' type='text/javascript'></script>
+    <script src='./assets/javascripts/app.js' type='text/javascript'></script>
+  </body>
+</html>
